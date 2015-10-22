@@ -7,17 +7,16 @@ module.directive("item", ['presence', function(presence) {
     link: function(scope, element, attrs) {
       console.log(attrs)
       console.log(presence)
-          if(scope.content){
-      
+      if(scope.content){
         scope.channel = presence.subscribe(scope.content);
-    
-         }
-      //console.log(attrs.ngPresence)
-      //console.log(scope)
+      }
       scope.chan = attrs.ngPresence;
+
+      scope.$on('$destroy', function() {
+        presence.unsubscribe(scope.content)
+      });
     },
     templateUrl: './templates/presence.html',
-    controller: 'PresenceCtrl',
 
     scope: {
       content: '=ngPresence',
@@ -27,42 +26,24 @@ module.directive("item", ['presence', function(presence) {
   }
 }])
 module.filter('startFrom', function() {
-    return function(input, start) {
-        if(input) {
+  return function(input, start) {
+    if(input) {
             start = +start; //parse to int
             return input.slice(start);
+          }
+          return [];
         }
-        return [];
-    }
-});
+      });
 module.controller('PresenceCtrl', [
   '$scope',
   'presence',
   function($scope, presence){
 
-    //so basically if the directive is hidden , it will be 
-    //unsubcribed
-    //maybe need to create a custom controller that also
-    //allows for hiding based on unsubscribing
-    //subscribe to the data channel in the directive placed
-    //basically should do a test in terms of making a controller
-    // that is isolated to this one item so I can access content
-    //$scope.extras = "123123"
-
     $scope.randomize = function(){
-      presence.update();
-      $scope.extras = ""
-
-      //console.log($scope.$$nextSibling.channel)
-      for(var i = $scope.limit; i < $scope.$$nextSibling.channel.length; i++ ){
-        console.log(i)
-       // console.log($scope.$$nextSibling.channel[i])
-       $scope.extras += "99"
-        console.log($scope.extras);   
-      }
+      presence.update();  
     }
   }
-]);
+  ]);
 
 // Auth mock.
 module.factory('auth', [
@@ -75,7 +56,7 @@ module.factory('auth', [
       }
     };
   }
-]);
+  ]);
 
 // Presence mock.
 module.factory('presence', [
@@ -105,21 +86,21 @@ module.factory('presence', [
       update: function(){
        // console.log(channels)
 
-        $http({
-          method: 'GET',
-          url: 'https://randomuser.me/api'
-        }).then(function(response){
-          var randomUser = response.data.results[0].user;
+       $http({
+        method: 'GET',
+        url: 'https://randomuser.me/api'
+      }).then(function(response){
+        var randomUser = response.data.results[0].user;
         //  console.log(randomUser);
-          var user = {
-            name: capitalize(randomUser.name.first) + ' ' + capitalize(randomUser.name.last),
-            username: randomUser.username,
-            imageUrl: randomUser.picture.medium
-          };
-          
-          _.forEach(channels, function(channel, channelName){
-            if(Math.random() < 0.75){
-              channel.push(user);
+        var user = {
+          name: capitalize(randomUser.name.first) + ' ' + capitalize(randomUser.name.last),
+          username: randomUser.username,
+          imageUrl: randomUser.picture.medium
+        };
+
+        _.forEach(channels, function(channel, channelName){
+          if(Math.random() < 0.75){
+            channel.push(user);
               //console.log(channel.length)
 
 
@@ -128,8 +109,8 @@ module.factory('presence', [
               channel.pop();
             }
           });
-        });
-      }
-    };
-  }
+      });
+    }
+  };
+}
 ]);
