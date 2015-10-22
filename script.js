@@ -12,10 +12,20 @@ module.directive("item", function() {
     controller: 'PresenceCtrl',
 
     scope: {
-      content: '=ngPresence'
+      content: '=ngPresence',
+      start: '=startAt'
     }
   }
 })
+module.filter('startFrom', function() {
+    return function(input, start) {
+        if(input) {
+            start = +start; //parse to int
+            return input.slice(start);
+        }
+        return [];
+    }
+});
 module.controller('PresenceCtrl', [
   '$scope',
   'presence',

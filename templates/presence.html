@@ -2,7 +2,7 @@
     <div class="list-group list-group-horizontal">
 
       <a>
-        <img style="padding:10px" ng-repeat="user in channel | limitTo: limit" tooltips title="{{ user.name }} ({{ user.username }})" ng-src="{{ user.imageUrl }}" width="75px" height="75px" />
+        <img style="padding:10px" ng-repeat="user in channel | limitTo: limit | startFrom : start" tooltips title="{{ user.name }} ({{ user.username }})" ng-src="{{ user.imageUrl }}" width="75px" height="75px" />
         <!-- {{ user.name }} ({{ user.username }}) -->
       </a>
 
