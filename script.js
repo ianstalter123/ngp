@@ -6,14 +6,15 @@ module.directive("item", function() {
     scope: {},
     link: function(scope, element, attrs) {
       console.log(attrs.ngPresence)
-      scope.chan = attrs.ngPresence; 
+      scope.chan = attrs.ngPresence;
     },
     templateUrl: './templates/presence.html',
     controller: 'PresenceCtrl',
 
     scope: {
       content: '=ngPresence',
-      start: '=startAt'
+      start: '=startAt',
+      limit: '=limit'
     }
   }
 })
@@ -33,7 +34,6 @@ module.controller('PresenceCtrl', [
 
     //subscribe to the data channel in the directive placed
     $scope.extras = "123123"
-    $scope.limit = 3;
     if($scope.content){
     $scope.channel = presence.subscribe($scope.content);
     
