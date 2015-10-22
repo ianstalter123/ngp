@@ -1,11 +1,19 @@
 var module = angular.module('presenceChannels', ['720kb.tooltips']);
 
-module.directive("item", function() {
+module.directive("item", ['presence', function(presence) {
   return {
     restrict: 'E',
     scope: {},
     link: function(scope, element, attrs) {
-      console.log(attrs.ngPresence)
+      console.log(attrs)
+      console.log(presence)
+          if(scope.content){
+      
+        scope.channel = presence.subscribe(scope.content);
+    
+         }
+      //console.log(attrs.ngPresence)
+      //console.log(scope)
       scope.chan = attrs.ngPresence;
     },
     templateUrl: './templates/presence.html',
@@ -17,7 +25,7 @@ module.directive("item", function() {
       limit: '=limit'
     }
   }
-})
+}])
 module.filter('startFrom', function() {
     return function(input, start) {
         if(input) {
@@ -32,14 +40,15 @@ module.controller('PresenceCtrl', [
   'presence',
   function($scope, presence){
 
+    //so basically if the directive is hidden , it will be 
+    //unsubcribed
+    //maybe need to create a custom controller that also
+    //allows for hiding based on unsubscribing
     //subscribe to the data channel in the directive placed
-    $scope.extras = "123123"
-    if($scope.content){
-    $scope.channel = presence.subscribe($scope.content);
-    
-    console.log(presence)
-    
-    }
+    //basically should do a test in terms of making a controller
+    // that is isolated to this one item so I can access content
+    //$scope.extras = "123123"
+
     $scope.randomize = function(){
       presence.update();
       $scope.extras = ""
