@@ -6,9 +6,21 @@ module.directive("item", ['presence', function(presence) {
     restrict: 'E',
     scope: {},
     link: function(scope, element, attrs) {
-
-      console.log(attrs)
-      console.log(presence)
+      scope.extra = ""
+      scope.extra1 = " "
+      scope.extra2 = "abc"
+ 
+      scope.$watch('channel', function(newValue, oldValue) {
+                if (newValue) {
+                  scope.extra = newValue
+                  scope.extra1 = " "
+                    for(var i = scope.limit; i < newValue.length; i++){
+                      scope.extra1 += newValue[i].name + " (" + newValue[i].username + "),"
+                    }
+                  }
+            }, true);
+      
+      // scope.test = scope.$$nextSibling.channel
       if(scope.content){
         scope.channel = presence.subscribe(scope.content);
       }
