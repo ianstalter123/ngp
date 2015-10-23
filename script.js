@@ -8,17 +8,21 @@ module.directive("item", ['presence', function(presence) {
     link: function(scope, element, attrs) {
       scope.extra = ""
       scope.extra1 = " "
-      scope.extra2 = "abc"
- 
+
+      scope.destroyMe = function(){
+        scope.$destroy();
+        element.remove();
+      },
+      
       scope.$watch('channel', function(newValue, oldValue) {
-                if (newValue) {
-                  scope.extra = newValue
-                  scope.extra1 = " "
-                    for(var i = scope.limit; i < newValue.length; i++){
-                      scope.extra1 += newValue[i].name + " (" + newValue[i].username + "),"
-                    }
-                  }
-            }, true);
+        if (newValue) {
+          scope.extra = newValue
+          scope.extra1 = " "
+          for(var i = scope.limit; i < newValue.length; i++){
+            scope.extra1 += newValue[i].name + " (" + newValue[i].username + "),"
+          }
+        }
+      }, true);
       
       // scope.test = scope.$$nextSibling.channel
       if(scope.content){
@@ -33,6 +37,8 @@ module.directive("item", ['presence', function(presence) {
     templateUrl: './templates/presence.html',
     scope: {
       content: '=ngPresence',
+      // need to find an alternate way of hiding/showing current user than selecting #1
+      // also maybe figure out how to highlight/ follow index of current user?
       start: '=startAt',
       limit: '=limit'
     }
@@ -51,11 +57,11 @@ module.controller('PresenceCtrl', [
   '$scope',
   'presence',
   function($scope, presence){
-     $scope.channels = ["channel1","channel2","channel3","channel4","channel5"]
+   $scope.channels = ["channel1","channel2","channel3","channel4","channel5"]
 
-    $scope.randomize = function(){
-      presence.update();  
-      console.log(presence)
+   $scope.randomize = function(){
+    presence.update();  
+      //console.log(presence)
     }
   }
   ]);
@@ -116,14 +122,15 @@ module.factory('presence', [
         _.forEach(channels, function(channel, channelName){
           if(Math.random() < 0.75){
             channel.push(user);
-              //console.log(channel.length)
+            console.log(channelName)
 
 
-            }
-            else if(channel.length > 1){
-              channel.pop();
-            }
-          });
+          }
+          else if(channel.length > 1){
+            channel.pop();
+            console.log(channelName)
+          }
+        });
       });
     }
   };

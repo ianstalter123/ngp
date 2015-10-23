@@ -12,10 +12,10 @@
   </head>
 
   <body ng-app="presenceChannels">
-  <div>
-  <item ng-click="remove()" ng-presence="'chanel3'" start-at="1" limit="3"></item>
+  <div id = 'first'>
+  <item ng-presence="'chanel3'" start-at="1" limit="3"></item>
   </div>
-  <div>
+  <div id = 'second'>
   <item ng-presence="'chanel2'" start-at="1" limit="5"></item>
   </div>
   <div>
@@ -30,6 +30,7 @@
     
     <div ng-controller="PresenceCtrl">
       <button ng-click="randomize()">Update the channel</button>
+     
     </div>
     <script src="./lib/angular-tooltips.min.js"></script>
   </body>
