@@ -2,9 +2,11 @@ var module = angular.module('presenceChannels', ['720kb.tooltips']);
 
 module.directive("item", ['presence', function(presence) {
   return {
+
     restrict: 'E',
     scope: {},
     link: function(scope, element, attrs) {
+
       console.log(attrs)
       console.log(presence)
       if(scope.content){
@@ -17,7 +19,6 @@ module.directive("item", ['presence', function(presence) {
       });
     },
     templateUrl: './templates/presence.html',
-
     scope: {
       content: '=ngPresence',
       start: '=startAt',
@@ -38,9 +39,11 @@ module.controller('PresenceCtrl', [
   '$scope',
   'presence',
   function($scope, presence){
+     $scope.channels = ["channel1","channel2","channel3","channel4","channel5"]
 
     $scope.randomize = function(){
       presence.update();  
+      console.log(presence)
     }
   }
   ]);
